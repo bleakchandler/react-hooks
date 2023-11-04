@@ -18,6 +18,7 @@ function PokemonInfo({pokemonName}) {
   // 🐨 Have state for the pokemon (null)
 
   const [pokemon, setPokemon] = React.useState(null)
+  const [error, setError] = React.useState(null)
 
   // 🐨 use React.useEffect where the callback should be called whenever the
   // pokemon name changes.
@@ -28,14 +29,24 @@ function PokemonInfo({pokemonName}) {
 
     if (pokemonName){
       setPokemon(null);
+      setError(null);
 
-      fetchPokemon(pokemonName).then(
-        pokemon => 
-            setPokemon(pokemon))
+      fetchPokemon(pokemonName)
+      .then((pokemon) => setPokemon(pokemon))
+      .catch((error) => setError(error));
+    } else { 
+      return;
     }
-
-    else return
   }, [pokemonName])
+
+
+    if (error) {
+      return(
+        <div role="alert">
+        There was an error: <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+        </div>
+      )
+    }
 
 
     if(!pokemonName){
@@ -47,8 +58,6 @@ function PokemonInfo({pokemonName}) {
     }
 
   }
-
-
 
 
   // 💰 DON'T FORGET THE DEPENDENCIES ARRAY!
